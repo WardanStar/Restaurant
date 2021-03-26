@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: AnimationSettings
   m_EditorClassIdentifier: 
   _timeOfApproachToTheCheckout: 6
+  _speedConveyor: 1

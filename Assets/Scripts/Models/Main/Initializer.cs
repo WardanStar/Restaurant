@@ -30,7 +30,7 @@ namespace ModelsSystem.Main
 			 conveyor = new Conveyor(messenger,
 	            gameSettings.MAXQuantityDummy, gameSettings.MAXQuantityFiguresAtTray);
              
-            _conveyorView.Assign(conveyor, arm, messenger);
+            _conveyorView.Assign(conveyor, arm, messenger, animationSettings);
             
              dummyController = new DummyController(messenger, gameSettings.MAXQuantityDummy, 3, 3,
 	            gameSettings.MINIntervalSpawnDummy, gameSettings.MAXIntervalSpawnDummy, gameSettings.MINTimeToLeaveDummy,

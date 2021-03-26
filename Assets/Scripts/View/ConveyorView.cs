@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using ModelsSystem;
 using ModelsSystem.Main;
+using SettingsSystem;
 using UnityEngine;
 
 namespace ViewSystem
@@ -12,6 +13,7 @@ namespace ViewSystem
 		private Arm _arm;
 		private Conveyor _conveyor;
 		private Messenger _messenger;
+		private AnimationSettings _animationSettings;
 
 		public event Action<int, TrayView> OnTakeTrayOff;
 		
@@ -22,11 +24,12 @@ namespace ViewSystem
 		private readonly List<TrayView> _trays = new List<TrayView>();
 		private TrayView _controlledTrayView;
 		
-		public void Assign(Conveyor conveyor, Arm arm, Messenger messenger)
+		public void Assign(Conveyor conveyor, Arm arm, Messenger messenger, AnimationSettings animationSettings)
 		{
 			_conveyor = conveyor;
 			_arm = arm;
 			_messenger = messenger;
+			_animationSettings = animationSettings;
 			_conveyor.OnMove += OnConveyorMove;
 			_conveyor.OnAddedTray += OnConveyorAddedTray;
 			_conveyor.OnTakeTrayOff += OnConveyorTakeTrayOff;
@@ -65,7 +68,9 @@ namespace ViewSystem
 					break;
 				}
 				
-				_trays[i].transform.DOMove(_slots[i + 1].position, 1f);
+				_messenger.OnDisconnectionUIButtonMailing();
+				_trays[i].transform.DOMove(_slots[i + 1].position, _animationSettings.SpeedConveyor);
+				DOVirtual.DelayedCall(_animationSettings.SpeedConveyor, () => _messenger.OnInclusionUIButtonMailing());
 			}
 			
 			for (var i = _trays.Count - 1; i > 0; i--)
@@ -73,7 +78,7 @@ namespace ViewSystem
 				_trays[i] = _trays[i - 1];
 			}
 			
-			_controlledTrayView.transform.DOMove(_slots[0].position, 2f);
+			_controlledTrayView.transform.DOMove(_slots[0].position, _animationSettings.SpeedConveyor);
 			_trays[0] = _controlledTrayView;
 			_controlledTrayView = null;
 		}
